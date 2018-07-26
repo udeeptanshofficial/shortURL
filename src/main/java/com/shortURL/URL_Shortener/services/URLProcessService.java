@@ -9,7 +9,10 @@ import com.shortURL.URL_Shortener.dataHandlingClasses.repository.URLsInUseReposi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,7 +66,7 @@ public class URLProcessService {
                 urLs_responseModel.setStartTime(urLs_db_model.getStartTime());
                 urLs_responseModel.setEndDate(urLs_db_model.getEndDate());
                 urLs_responseModel.setEndTime(urLs_db_model.getEndTime());
-                urLs_responseModel.setExisting(true);
+                urLs_responseModel.setExisting(false);
                 urLs_responseModel.setNumberOfCharInLongURL(urLs_db_model.getLongURL().length());
                 urLs_responseModel.setNumberOfCharInShortURL(urLs_db_model.getLongURL().length());
 
@@ -87,6 +90,32 @@ public class URLProcessService {
 //    public DataReturnModel createShortURL(String longURL, String securityCode) {
 //
 //    }
+
+    public void scanDBforExpiredURLs(){
+        List<URLs_DB_Model> existingURL = urLsInUseRepository.findAll();
+
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String today = dateFormat.format(date);
+
+        if (existingURL.size()!=0){
+            for (URLs_DB_Model urLs_db : existingURL){
+                if (today.equals(urLs_db.getEndDate()))
+                    removeShortURL(urLs_db.getShortURL());
+            }
+        }
+    }
+
+    private void removeShortURL(String shortURL){
+        //Fetching URL details from In Use Repository
+        URLs_DB_Model urLs_db_model = urLsInUseRepository.findByShortURL(shortURL);
+
+        //Saving the expired URL in Expired Repository
+        urLsExpiredRepository.save(urLs_db_model);
+
+        //Deleting from In Use Repository
+        urLsInUseRepository.delete(urLs_db_model);
+    }
 
 }
 

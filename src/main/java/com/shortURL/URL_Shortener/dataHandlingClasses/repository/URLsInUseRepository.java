@@ -4,5 +4,5 @@ import com.shortURL.URL_Shortener.dataHandlingClasses.models.URLs_DB_Model;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface URLsInUseRepository extends MongoRepository<URLs_DB_Model, String> {
-//    public List<URLs_DB_Model> findAll();
+    public URLs_DB_Model findByShortURL(String shortURL);
 }
