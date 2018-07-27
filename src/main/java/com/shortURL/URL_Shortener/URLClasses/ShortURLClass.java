@@ -4,13 +4,7 @@ import java.math.BigInteger;
 
 public class ShortURLClass {
     private static final String SHORT_URL_CHARACTER_SET =
-            "0123456789" + //10
-            "abcdefghij" + //20
-            "klmnopqrst" + //30
-            "uvwxyz" +     //36
-            "ABCDEFGHIJ" + //46
-            "KLMNOPQRST" + //56
-            "UVWXYZ";      //62
+            "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final int CHARACTER_SET_LENGTH = SHORT_URL_CHARACTER_SET.length();
 
     //To produce short URL from a random number generated
