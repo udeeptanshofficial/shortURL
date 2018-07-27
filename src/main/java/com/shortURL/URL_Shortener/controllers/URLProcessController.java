@@ -1,12 +1,11 @@
 package com.shortURL.URL_Shortener.controllers;
 
+import com.shortURL.URL_Shortener.URLClasses.models.DataReturnModel;
+import com.shortURL.URL_Shortener.URLClasses.models.ShortURL_RequestModel;
 import com.shortURL.URL_Shortener.services.URLProcessService;
-import com.shortURL.URL_Shortener.dataHandlingClasses.models.DataReturnModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class URLProcessController {
@@ -19,23 +18,18 @@ public class URLProcessController {
         return "The server is up!";
     }
 
-//    @PostMapping(value = "/createURL", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public DataReturnModel createShortURL(@RequestBody ShortURL_RequestModel shortURL_request){
-//        if (shortURL_request.customURL!=null){
-//
-//        }
-//
-//
-//        DataReturnModel dataReturnModel = new DataReturnModel();
-//        dataReturnModel.setCode(200);
-//        dataReturnModel.setMessage("");
-//
-//    }
+    @PostMapping(value = "/createURL", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DataReturnModel createShortURL(@RequestBody ShortURL_RequestModel shortURL_request){
+        return URLProcessService.createShortURL(shortURL_request.getLongURL(), shortURL_request.getNumberOfDaysValid(), shortURL_request.getCustomURL(), shortURL_request.getSecureCode());
+    }
+
+    @GetMapping(value = "/{shortURL}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DataReturnModel getLongURL(@PathVariable String shortURL){
+        return URLProcessService.getLongURL(shortURL);
+    }
 
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel getAllURLEntries(){
         return URLProcessService.getAllURLEntries();
     }
-
-
 }

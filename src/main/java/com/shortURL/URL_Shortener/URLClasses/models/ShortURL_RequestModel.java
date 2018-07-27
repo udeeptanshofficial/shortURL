@@ -1,4 +1,4 @@
-package com.shortURL.URL_Shortener.dataHandlingClasses.models;
+package com.shortURL.URL_Shortener.URLClasses.models;
 
 import lombok.Data;
 
@@ -8,4 +8,5 @@ public class ShortURL_RequestModel {
     public String longURL;
     public boolean isSecure;
     public String secureCode;
+    public int numberOfDaysValid;
 }

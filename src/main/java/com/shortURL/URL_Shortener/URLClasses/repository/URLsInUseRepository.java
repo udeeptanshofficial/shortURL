@@ -1,6 +1,6 @@
-package com.shortURL.URL_Shortener.dataHandlingClasses.repository;
+package com.shortURL.URL_Shortener.URLClasses.repository;
 
-import com.shortURL.URL_Shortener.dataHandlingClasses.models.URLs_DB_Model;
+import com.shortURL.URL_Shortener.URLClasses.models.URLs_DB_Model;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface URLsInUseRepository extends MongoRepository<URLs_DB_Model, String> {

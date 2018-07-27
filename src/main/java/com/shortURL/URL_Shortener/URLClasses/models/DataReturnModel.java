@@ -1,4 +1,4 @@
-package com.shortURL.URL_Shortener.dataHandlingClasses.models;
+package com.shortURL.URL_Shortener.URLClasses.models;
 
 import lombok.Data;
 
