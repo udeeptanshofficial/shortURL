@@ -197,6 +197,14 @@ public class URLProcessService {
         return new DataReturnModel(new URLs_DB_Model(), "Invalid Security Key", 200);
     }
 
+    public DataReturnModel loginAdmin(AdminLoginDetailsModel adminLoginDetailsModel){
+        if ((adminLoginDetailsModel.getUsername().equals(DataHelper.ADMIN_USERNAME_MRIDUL) && adminLoginDetailsModel.getPassword().equals(DataHelper.ADMIN_PASSWORD_MRIDUL)) ||
+                (adminLoginDetailsModel.getUsername().equals(DataHelper.ADMIN_USERNAME_AFSAR) && adminLoginDetailsModel.getPassword().equals(DataHelper.ADMIN_PASSWORD_AFSAR))){
+            return new DataReturnModel("", "Login Succesful for "+ adminLoginDetailsModel.getUsername(), 200);
+        }
+
+        return new DataReturnModel("", "Username and Password Not Authorized!", 201);
+    }
     /*
      *This is the Main piece
      */

@@ -1,5 +1,6 @@
 package com.shortURL.URL_Shortener.controllers;
 
+import com.shortURL.URL_Shortener.URLClasses.models.AdminLoginDetailsModel;
 import com.shortURL.URL_Shortener.URLClasses.models.DataReturnModel;
 import com.shortURL.URL_Shortener.URLClasses.models.SecureURL_RequestModel;
 import com.shortURL.URL_Shortener.URLClasses.models.ShortURL_RequestModel;
@@ -39,5 +40,10 @@ public class URLProcessController {
     @PostMapping(value = "/getSecureURL", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel getSecureLongURL(@RequestBody SecureURL_RequestModel secureURL_requestModel) throws NoSuchAlgorithmException {
         return URLProcessService.getSecureLongURL(secureURL_requestModel);
+    }
+
+    @PostMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
+    public DataReturnModel loginAdmin(@RequestBody AdminLoginDetailsModel adminLoginDetailsModel){
+        return URLProcessService.loginAdmin(adminLoginDetailsModel);
     }
 }

@@ -14,8 +14,14 @@ public class DataHelper {
     public static final String DATE_PATTERN = "dd/MM/yyyy HH:mm";
     public static final String END_TIME = "23:55";
 
-    public static final int RANGE_MIN = 1111111111;
-    public static final int RANGE_MAX = 9999999;
+    private static final long RANGE_MIN = 20000000L;
+    private static final long RANGE_MAX = 99999999999L;
+
+    public static final String ADMIN_USERNAME_MRIDUL = "mridul";
+    public static final String ADMIN_USERNAME_AFSAR = "afsar";
+    public static final String ADMIN_PASSWORD_MRIDUL = "qweasdrf";
+    public static final String ADMIN_PASSWORD_AFSAR = "afsar!23";
+
 
     // Returns true if url is valid
     public static boolean isValidURL(String url)
@@ -41,10 +47,8 @@ public class DataHelper {
     }
 
     public static BigInteger getRandomBigInteger() {
-        long min = 20000000L;
-        long max = 99999999999L;
         Random r = new Random();
-        long number = min + ((long)(r.nextDouble()*(max-min)));
+        long number = RANGE_MIN + ((long)(r.nextDouble()*(RANGE_MAX-RANGE_MIN)));
 
         return BigInteger.valueOf(number);
     }
