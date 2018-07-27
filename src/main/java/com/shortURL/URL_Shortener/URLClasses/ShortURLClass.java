@@ -8,11 +8,11 @@ public class ShortURLClass {
     private static final int CHARACTER_SET_LENGTH = SHORT_URL_CHARACTER_SET.length();
 
     //To produce short URL from a random number generated
-    public static String encode(long number) {
+    public static String encode(BigInteger number) {
         StringBuilder shortURL = new StringBuilder();
-        while ( number > 0 ) {
-            shortURL.append(SHORT_URL_CHARACTER_SET.charAt((int)(number % CHARACTER_SET_LENGTH)));
-            number /= CHARACTER_SET_LENGTH;
+        while ( number.compareTo(new BigInteger("0")) > 0 ) {
+            shortURL.append(SHORT_URL_CHARACTER_SET.charAt((number.mod(new BigInteger(String.valueOf(CHARACTER_SET_LENGTH)))).intValue()));
+            number = number.divide(new BigInteger(String.valueOf(CHARACTER_SET_LENGTH)));
         }
         return shortURL.reverse().toString();
     }
@@ -42,25 +42,6 @@ public class ShortURLClass {
         }
 
         return num;
-    }
-
-    public static void main(String agr[]){
-//        System.out.println(CHARACTER_SET_LENGTH);
-
-        System.out.println(encode(26097696974L));
-        System.out.println(encode(233262401942202255L));
-        System.out.println(encode(1031894293776L));
-//        System.out.println(encode(4112231743382685848569029863052260L));
-        System.out.println(encode(8829337178420916741L));
-
-
-        System.out.println(decode("subham"));
-        System.out.println(decode("helloworld"));
-        System.out.println(decode("iamfine"));
-        System.out.println(decode("mridulmohantripathi"));
-        System.out.println(decode("awesomeansh"));
-
-
     }
 }
 

@@ -83,9 +83,16 @@ public class URLProcessService {
 
 
     public DataReturnModel createShortURL(String longURL, int numberOfDaysValid, String customURL, String securityCode) {
+        if (!DataHelper.isValidURL(longURL)){
+            return new DataReturnModel("", "The URL entered is not valid!", 218);
+        }
+
         if (customURL != null) {
             if (!isCustomURLValid(customURL)) {
                 return new DataReturnModel("", "Custom URL not available", 210);
+            }
+            else if (!DataHelper.isValidShortURL(customURL)){
+                return new DataReturnModel("", "Not a valid custom URL. It should not contain any special character or spaces.", 220);
             }
         }
 

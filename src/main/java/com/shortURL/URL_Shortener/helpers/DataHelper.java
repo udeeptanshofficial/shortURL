@@ -1,5 +1,6 @@
 package com.shortURL.URL_Shortener.helpers;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,14 +10,21 @@ public class DataHelper {
     public static final String DATE_PATTERN = "dd/MM/yyyy HH:mm";
     public static final String END_TIME = "23:55";
 
-    public static boolean isValidURL(String url){
-        String URL_Regex = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$";
-        return url.matches(URL_Regex);
+    // Returns true if url is valid
+    public static boolean isValidURL(String url)
+    {
+        try {
+            new URL(url).toURI();
+            return true;
+        }
+
+        catch (Exception e) {
+            return false;
+        }
     }
 
-    public static boolean isValidIP(String ip){
-        String IP_Regex = "";
-        return ip.matches(IP_Regex);
+    public static boolean isValidShortURL(String shortURL){
+        return shortURL.matches("[a-zA-Z0-9]*");
     }
 
     public static String getDateAfter(int days){
