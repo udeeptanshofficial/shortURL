@@ -11,7 +11,7 @@ public class URLs_DB_Model {
     public String shortURL;
     public String longURL;
     public boolean isSecure;
-    public String secureCode;
+    public String securityKey;
     public String startDate;
     public String startTime;
     public String endDate;
