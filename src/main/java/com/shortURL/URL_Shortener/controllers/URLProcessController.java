@@ -17,13 +17,13 @@ public class URLProcessController {
     @Autowired
     private URLProcessService URLProcessService;
 
-    @RequestMapping("/test")
+    @PostMapping("/test")
     public String test() {
         return "The server is up!";
     }
 
     @PostMapping(value = "/createURL", produces = MediaType.APPLICATION_JSON_VALUE)
-    public DataReturnModel createShortURL(@RequestBody ShortURL_RequestModel shortURL_request){
+    public DataReturnModel createShortURL(@RequestBody ShortURL_RequestModel shortURL_request) throws NoSuchAlgorithmException {
         return URLProcessService.createShortURL(shortURL_request.getLongURL(), shortURL_request.getNumberOfDaysValid(), shortURL_request.getCustomURL(), shortURL_request.getSecureCode());
     }
 

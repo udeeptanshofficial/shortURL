@@ -84,13 +84,13 @@ public class URLProcessService {
     }
 
 
-    public DataReturnModel createShortURL(String longURL, int numberOfDaysValid, String customURL, String securityCode) {
+    public DataReturnModel createShortURL(String longURL, int numberOfDaysValid, String customURL, String securityCode) throws NoSuchAlgorithmException {
         if (!DataHelper.isValidURL(longURL)){
-            return new DataReturnModel("", "The URL entered is not valid!", 218);
+            return new DataReturnModel("", "The URL entered is not valid. Please generate Short URL for only valid URLs", 218);
         }
 
-        if (customURL != null) {
-            if (!isCustomURLValid(customURL)) {
+        if (!customURL.equals("")) {
+            if (!isShortURLAvailable(customURL)) {
                 return new DataReturnModel("", "Custom URL not available", 210);
             }
             else if (!DataHelper.isValidShortURL(customURL)){
@@ -100,38 +100,38 @@ public class URLProcessService {
 
         String endDate = DataHelper.getDateAfter(numberOfDaysValid);
 
-        String shortURL_Numbered = String.valueOf(DataHelper.getRandomBigInteger());
+        String shortURL_Numbered = getUniqueId();
 
         URLs_DB_Model urLs_db_model = new URLs_DB_Model();
 
-        if (customURL != null)
+        if (!customURL.equals(""))
             urLs_db_model.setShortURL(String.valueOf(ShortURLClass.decode(customURL)));
         else
             urLs_db_model.setShortURL(shortURL_Numbered);
 
-        if (securityCode != null) {
+        if (!securityCode.equals("")) {
             urLs_db_model.setSecure(true);
-            urLs_db_model.setSecurityKey(securityCode);
+            urLs_db_model.setSecurityKey(DataHelper.getEncryptedKey(securityCode));
         } else {
             urLs_db_model.setSecure(false);
-            urLs_db_model.setSecurityKey(null);
+            urLs_db_model.setSecurityKey("");
         }
 
         urLs_db_model.setLongURL(longURL);
         urLs_db_model.setStartDate(DataHelper.getDateNow());
         urLs_db_model.setStartTime(DataHelper.getTimeNow());
-        urLs_db_model.setSecurityKey(endDate);
-        urLs_db_model.setSecurityKey(DataHelper.END_TIME);
+        urLs_db_model.setEndDate(endDate);
+        urLs_db_model.setEndTime(DataHelper.END_TIME);
 
         urLsInUseRepository.save(urLs_db_model);
 
         urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
 
-        return new DataReturnModel(urLs_db_model, "Successfully created short URL", 200);
+        return new DataReturnModel(urLs_db_model, "Successfully created short URL /"+ urLs_db_model.getShortURL() + ". This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
     }
 
     public DataReturnModel getLongURL(String shortURL){
-        if (shortURL==null){
+        if (shortURL==null || shortURL.equals("")){
             return new DataReturnModel(new URLs_DB_Model(), "No Long URL found in the data base", 204);
         }
 
@@ -189,7 +189,7 @@ public class URLProcessService {
         if (!urLs_db_model.isSecure)
             return new DataReturnModel(new URLs_DB_Model(), "This is not a secure URL. Security Key is not required", 206);
 
-        if (DataHelper.getEncryptedKey(secureURL_requestModel.getSecurityKey()).equals(DataHelper.getEncryptedKey(urLs_db_model.getSecurityKey()))){
+        if (DataHelper.getEncryptedKey(secureURL_requestModel.getSecurityKey()).equals(urLs_db_model.getSecurityKey())){
             urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
             return new DataReturnModel(urLs_db_model, "Long URL found in the data base", 200);
         }
@@ -205,16 +205,24 @@ public class URLProcessService {
 
         return new DataReturnModel("", "Username and Password Not Authorized!", 201);
     }
-    /*
-     *This is the Main piece
-     */
-    private String getShortURL() {
-        return "";
+
+    private boolean isShortURLAvailable(String customURL) {
+        BigInteger encoded = ShortURLClass.decode(customURL);
+        URLs_DB_Model urLsDbModel = urLsInUseRepository.findByShortURL(String.valueOf(encoded));
+        return urLsDbModel == null;
     }
 
-    private boolean isCustomURLValid(String customURL) {
-        URLs_DB_Model urLsDbModel = urLsInUseRepository.findByShortURL(customURL);
-        return urLsDbModel == null;
+    private String getUniqueId(){
+        BigInteger num = DataHelper.getRandomBigInteger();
+        URLs_DB_Model urLsDbModel = urLsInUseRepository.findByShortURL(String.valueOf(num));
+
+        if (urLsDbModel!=null)
+            while (urLsDbModel!=null){
+                num = DataHelper.getRandomBigInteger();
+                urLsDbModel = urLsInUseRepository.findByShortURL(String.valueOf(num));
+            }
+
+        return String.valueOf(num);
     }
 
 }
