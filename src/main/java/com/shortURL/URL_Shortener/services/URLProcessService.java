@@ -125,9 +125,11 @@ public class URLProcessService {
 
         urLsInUseRepository.save(urLs_db_model);
 
-        urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
+        //urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
 
-        return new DataReturnModel(urLs_db_model, "Successfully created short URL /"+ urLs_db_model.getShortURL() + ". This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
+        String shortURL = ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL()));
+
+        return new DataReturnModel(new ShortURL_ResponseModel(shortURL, urLs_db_model.getLongURL(), urLs_db_model.isSecure()), "Successfully created short URL /"+ urLs_db_model.getShortURL() + ". This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
     }
 
     public DataReturnModel getLongURL(String shortURL){
@@ -142,10 +144,10 @@ public class URLProcessService {
         }
 
         if (urLs_db_model.isSecure)
-            return new DataReturnModel(new URLs_DB_Model(), "This is a secure URL. Security Key required", 207);
+            return new DataReturnModel(new ShortURL_ResponseModel(shortURL, "", true), "This is a secure URL. Security Key required", 207);
 
         urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
-        return new DataReturnModel(urLs_db_model, "Long URL found in the data base", 200);
+        return new DataReturnModel(new ShortURL_ResponseModel(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())), urLs_db_model.getLongURL(), false), "Long URL found in the data base", 200);
     }
 
     public void scanDBforExpiredURLs() {
@@ -194,7 +196,7 @@ public class URLProcessService {
             return new DataReturnModel(urLs_db_model, "Long URL found in the data base", 200);
         }
 
-        return new DataReturnModel(new URLs_DB_Model(), "Invalid Security Key", 200);
+        return new DataReturnModel(new ShortURL_ResponseModel(secureURL_requestModel.getShortURL(), urLs_db_model.getLongURL(), true), "Invalid Security Key", 200);
     }
 
     public DataReturnModel loginAdmin(AdminLoginDetailsModel adminLoginDetailsModel){
