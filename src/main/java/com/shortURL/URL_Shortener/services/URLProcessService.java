@@ -125,8 +125,6 @@ public class URLProcessService {
 
         urLsInUseRepository.save(urLs_db_model);
 
-        //urLs_db_model.setShortURL(ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())));
-
         String shortURL = ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL()));
 
         return new DataReturnModel(new ShortURL_ResponseModel(shortURL, urLs_db_model.getLongURL(), urLs_db_model.isSecure()), "Successfully created short URL /"+ urLs_db_model.getShortURL() + ". This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
