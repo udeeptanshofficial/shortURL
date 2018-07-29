@@ -26,14 +26,17 @@ public class DataHelper {
     // Returns true if url is valid
     public static boolean isValidURL(String url)
     {
-        try {
-            new URL(url).toURI();
-            return true;
-        }
+//        try {
+//            new URL(url).toURI();
+//            return true;
+//        }
+//
+//        catch (Exception e) {
+//            return false;
+//        }
 
-        catch (Exception e) {
-            return false;
-        }
+        return true;
+
     }
 
     public static boolean isValidShortURL(String shortURL){
