@@ -5,8 +5,7 @@ import ViewPage from './web_pages/ViewPage';
 
 export default () => (
     <Switch>
-        <Route exact strict path="/" component={Home} />
+        <Route exact path="/" component={Home} />
         <Route path="/:shortURL" component={ViewPage} />
-        <Route path="*" component={ViewPage} />
     </Switch>
 );
