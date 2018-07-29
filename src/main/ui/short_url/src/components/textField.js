@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './components.css';
 
-export class TextField extends Component {
-    render() {
-        return (
-            <div>
-                <p>{this.props.label}<sup>{this.props.required}</sup></p>
-                <input className="input-text" type="text" name={this.props.name} placeholder={this.props.placeholder} value={this.props.value}/>
-            </div>
-        );
-    }
-}
+const TextField = ({ input, meta, disabled, label, placeholder, required, type = 'text' }) => {
+    const hasError = meta.touched && meta.error;
+    return (
+        <div className={hasError ? 'error' : ''}>
+            <p>{label}<sup>{required ? '*' : ''}</sup></p>
+            <input {...input} disabled={disabled} className="input-text" type={type} placeholder={placeholder} />
+            {hasError && <span>{meta.error}</span>}
+        </div>
+    );
+};
+
+export default TextField;

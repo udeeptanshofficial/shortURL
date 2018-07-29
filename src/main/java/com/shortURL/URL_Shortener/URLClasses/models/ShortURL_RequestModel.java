@@ -7,6 +7,6 @@ public class ShortURL_RequestModel {
     public String customURL;
     public String longURL;
     public boolean isSecure;
-    public String secureCode;
+    public String securityKey;
     public int numberOfDaysValid;
 }

@@ -2,12 +2,24 @@
     width: 70%;
     height: 10px;
     display: inline-block;
-  box-sizing: content-box;
-  padding: 10px 20px;
-  border: 2px solid #b7b7b7;
-  border-radius: 5px;
-  color: rgb(13, 56, 73);
-  text-overflow: clip;
-  background: rgba(222,225,226,1);
-  font-size: 15px;
+    box-sizing: content-box;
+    padding: 10px 20px;
+    border: 2px solid #b7b7b7;
+    border-radius: 5px;
+    color: rgb(13, 56, 73);
+    text-overflow: clip;
+    background: rgba(222,225,226,1);
+    font-size: 15px;
+}
+
+.error .input-text {
+  border: 1px solid rgb(167, 36, 36);
+}
+
+.error p, .error span {
+  color: rgb(167, 36, 36);
+}
+
+.success span {
+  color: rgb(49, 128, 49);
 }

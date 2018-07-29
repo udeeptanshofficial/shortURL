@@ -17,31 +17,37 @@ public class URLProcessController {
     @Autowired
     private URLProcessService URLProcessService;
 
-    @PostMapping("/test")
+    @PostMapping("/")
     public String test() {
         return "The server is up!";
     }
 
+    @CrossOrigin
     @PostMapping(value = "/createURL", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel createShortURL(@RequestBody ShortURL_RequestModel shortURL_request) throws NoSuchAlgorithmException {
-        return URLProcessService.createShortURL(shortURL_request.getLongURL(), shortURL_request.getNumberOfDaysValid(), shortURL_request.getCustomURL(), shortURL_request.getSecureCode());
+        System.out.println(shortURL_request.toString());
+        return URLProcessService.createShortURL(shortURL_request.getLongURL(), shortURL_request.getNumberOfDaysValid(), shortURL_request.getCustomURL(), shortURL_request.getSecurityKey());
     }
 
-    @GetMapping(value = "/{shortURL}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
+    @GetMapping(value = "/urls/{shortURL}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel getLongURL(@PathVariable String shortURL){
         return URLProcessService.getLongURL(shortURL);
     }
 
+    @CrossOrigin
     @GetMapping(value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel getAllURLEntries(){
         return URLProcessService.getAllURLEntries();
     }
 
+    @CrossOrigin
     @PostMapping(value = "/getSecureURL", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel getSecureLongURL(@RequestBody SecureURL_RequestModel secureURL_requestModel) throws NoSuchAlgorithmException {
         return URLProcessService.getSecureLongURL(secureURL_requestModel);
     }
 
+    @CrossOrigin
     @PostMapping(value = "/admin", produces = MediaType.APPLICATION_JSON_VALUE)
     public DataReturnModel loginAdmin(@RequestBody AdminLoginDetailsModel adminLoginDetailsModel){
         return URLProcessService.loginAdmin(adminLoginDetailsModel);

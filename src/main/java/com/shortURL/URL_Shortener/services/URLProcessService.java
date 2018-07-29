@@ -6,6 +6,7 @@ import com.shortURL.URL_Shortener.URLClasses.repository.URLsExpiredRepository;
 import com.shortURL.URL_Shortener.URLClasses.repository.URLsInUseRepository;
 import com.shortURL.URL_Shortener.helpers.DataHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -23,6 +24,9 @@ public class URLProcessService {
 
     @Autowired
     private URLsExpiredRepository urLsExpiredRepository;
+
+    @Autowired
+    Environment environment;
 
     public DataReturnModel getAllURLEntries() {
         List<URLs_DB_Model> existingURL = urLsInUseRepository.findAll();
@@ -85,6 +89,11 @@ public class URLProcessService {
 
 
     public DataReturnModel createShortURL(String longURL, int numberOfDaysValid, String customURL, String securityCode) throws NoSuchAlgorithmException {
+        if (customURL==null)
+            customURL="";
+        if (securityCode==null)
+            securityCode="";
+
         if (!DataHelper.isValidURL(longURL)){
             return new DataReturnModel("", "The URL entered is not valid. Please generate Short URL for only valid URLs", 218);
         }
@@ -127,7 +136,7 @@ public class URLProcessService {
 
         String shortURL = ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL()));
 
-        return new DataReturnModel(new ShortURL_ResponseModel(shortURL, urLs_db_model.getLongURL(), urLs_db_model.isSecure()), "Successfully created short URL /"+ urLs_db_model.getShortURL() + ". This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
+        return new DataReturnModel(new ShortURL_ResponseModel(shortURL, urLs_db_model.getLongURL(), urLs_db_model.isSecure()), "Successfully created short URL http://localhost:3000/"+ ShortURLClass.encode(new BigInteger(urLs_db_model.getShortURL())) + " and This will be valid till " + urLs_db_model.getEndDate()+ " " + urLs_db_model.getEndTime(), 200);
     }
 
     public DataReturnModel getLongURL(String shortURL){
